@@ -214,7 +214,7 @@ class SlurmSpawner(Spawner):
         slurm_script = Template('''#!/bin/bash
 #SBATCH --cpus-per-task=$cpus
 #SBATCH --job-name=$job_name
-#SBATCH --mem=$mem
+###SBATCH --mem=$mem
 #SBATCH --ntasks=$ntasks
 #SBATCH --output=/home/$user/$output
 #SBATCH --partition=$part
@@ -308,7 +308,7 @@ $cmd
                 break
             elif 'PENDING' in job_state:
                 job_state = self.check_slurm_job_state()
-                time.sleep(1)
+                time.sleep(5)
             else:
                 error = "Job %s failed to start!" % self.slurm_job_id
                 self.log.error(error)
