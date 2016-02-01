@@ -234,7 +234,7 @@ $sbatch
 
 echo "*** Spawning single-user server ***"
 $export_cmd
-$cmd
+$cmd --config=$CURC_JUPYTERHUB_ROOT/Jupyter/jupyter_notebook_config.py
 
         ''')
 
