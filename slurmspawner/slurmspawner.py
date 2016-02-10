@@ -212,21 +212,20 @@ class SlurmSpawner(Spawner):
         cmd = full_cmd[1]
         
         slurm_script = Template('''#!/bin/bash
-#SBATCH --cpus-per-task=$cpus
+#SBATCH --nodes=1
 #SBATCH --job-name=$job_name
-###SBATCH --mem=$mem
-#SBATCH --ntasks=$ntasks
 #SBATCH --output=/home/$user/$output
 #SBATCH --partition=$part
 #SBATCH --qos=$qos
 #SBATCH --time=$time
 #SBATCH --workdir=/home/$user
-#SBATCH --comment=$port
 #SBATCH --open-mode=append
 #SBATCH --uid=$user
 #SBATCH --gid=$gid
 #SBATCH --export=none
 #SBATCH --get-user-env=L
+
+USER=$user
 
 ##### USER-DEFINED TEMPLATE LOADED HERE #####
 $sbatch
@@ -234,8 +233,7 @@ $sbatch
 
 echo "*** Spawning single-user server ***"
 $export_cmd
-$cmd --config=$CURC_JUPYTERHUB_ROOT/Jupyter/jupyter_notebook_config.py
-
+$cmd --config=$$CURC_JUPYTERHUB_ROOT/Jupyter/jupyter_notebook_config.py
         ''')
 
         gid = pwd.getpwnam(user).pw_gid # get group id of user
